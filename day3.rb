@@ -73,6 +73,12 @@ class SchematicParser
     return numbers
   end
 
+  def combined_gear_ratio
+    gears.inject(0) do |total, (_coords, part_numbers)|
+      part_numbers.length == 2 ? total + (part_numbers.first * part_numbers.last) : total
+    end
+  end
+
   # check the 8 spots around this spot looking for something
   def look_around_you(row, col)
     [row - 1, row, row + 1].each do |row_idx|
@@ -109,10 +115,9 @@ puts "Part 1 Output"
 p SchematicParser.new(input).part_numbers.sum
 
 puts "Test Output"
-gears = SchematicParser.new(test).gears
-puts "Gears: #{gears.inspect}"
-test_out = gears.inject(0) { |memo, (_coords, part_numbers)| part_numbers.length == 2 ? memo + (part_numbers.first * part_numbers.last) : memo }
+puts "Gears: #{schema.gears.inspect}"
+test_out = schema.combined_gear_ratio
 puts "Passing? #{test_out} == 467835 #{test_out == 467835}"
 
 puts "Part 2 Output"
-p SchematicParser.new(input).gears.inject(0) { |memo, (_coords, part_numbers)| part_numbers.length == 2 ? memo + (part_numbers.first * part_numbers.last) : memo }
+p SchematicParser.new(input).combined_gear_ratio
